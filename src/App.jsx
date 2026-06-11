@@ -16,17 +16,28 @@ const C = {
   amber: "#ffd24a",
 };
 
-/* ---------- digital rain canvas ---------- */
+/* ---------- mantra rain canvas ---------- */
+/* Each column streams one mantra top-to-bottom, split into akshara
+   (syllable clusters) so conjuncts like क्ष्म्यै render intact. */
+const MANTRAS = [
+  ["ॐ", "गं", "ग", "ण", "प", "त", "ये", "न", "मः"],
+  ["ॐ", "श्री", "म", "हा", "ल", "क्ष्म्यै", "न", "मः"],
+  ["ॐ", "न", "मः", "शि", "वा", "य"],
+  ["ॐ", "ह", "नु", "म", "ते", "न", "मः"],
+];
+const pickMantra = () => MANTRAS[Math.floor(Math.random() * MANTRAS.length)];
+
 function DigitalRain() {
   const canvasRef = useRef(null);
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    let raf, cols, drops, w, h;
-    const glyphs =
-      "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEFXZ$#@%&";
-    const fontSize = 16;
+    let raf, cols, drops, steps, texts, w, h;
+    const fontSize = 17;
+    const colWidth = 28; // wider than fontSize: conjunct clusters need room
+    const rowH = 24; // extra leading for matras above/below the baseline
+    const gap = 4; // blank cells between mantra repetitions
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -35,8 +46,10 @@ function DigitalRain() {
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cols = Math.floor(w / fontSize);
+      cols = Math.floor(w / colWidth);
       drops = Array(cols).fill(1).map(() => Math.random() * -50);
+      steps = Array(cols).fill(0);
+      texts = Array.from({ length: cols }, pickMantra);
       if (reduce) {
         // setting canvas dimensions clears it, so repaint the static frame
         ctx.fillStyle = "rgba(2,6,2,1)";
@@ -49,18 +62,28 @@ function DigitalRain() {
     let last = 0;
     const draw = (t) => {
       raf = requestAnimationFrame(draw);
-      if (t - last < 50) return; // ~20fps, easy on the eyes
+      if (t - last < 60) return; // slow fall, easy to read
       last = t;
-      ctx.fillStyle = "rgba(2, 6, 2, 0.08)";
+      ctx.fillStyle = "rgba(2, 6, 2, 0.06)";
       ctx.fillRect(0, 0, w, h);
-      ctx.font = fontSize + "px monospace";
+      ctx.font = fontSize + "px 'Noto Sans Devanagari', monospace";
       for (let i = 0; i < cols; i++) {
-        const ch = glyphs[Math.floor(Math.random() * glyphs.length)];
-        const y = drops[i] * fontSize;
-        ctx.fillStyle = Math.random() > 0.975 ? "#d6ffe0" : "#00ff4188";
-        ctx.fillText(ch, i * fontSize, y);
-        if (y > h && Math.random() > 0.975) drops[i] = 0;
+        const m = texts[i];
+        const idx = steps[i] % (m.length + gap);
+        const y = drops[i] * rowH;
+        if (idx < m.length) {
+          const ch = m[idx];
+          ctx.fillStyle =
+            ch === "ॐ" ? "#ffd24acc" : Math.random() > 0.96 ? "#d6ffe0" : "#00ff4188";
+          ctx.fillText(ch, i * colWidth, y);
+        }
+        steps[i]++;
         drops[i]++;
+        if (y > h && Math.random() > 0.975) {
+          drops[i] = 0;
+          steps[i] = 0;
+          texts[i] = pickMantra();
+        }
       }
     };
 
