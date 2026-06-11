@@ -62,7 +62,7 @@ function DigitalRain() {
     let last = 0;
     const draw = (t) => {
       raf = requestAnimationFrame(draw);
-      if (t - last < 60) return; // slow fall, easy to read
+      if (t - last < 45) return; // slow fall, easy to read
       last = t;
       ctx.fillStyle = "rgba(2, 6, 2, 0.06)";
       ctx.fillRect(0, 0, w, h);
@@ -74,7 +74,7 @@ function DigitalRain() {
         if (idx < m.length) {
           const ch = m[idx];
           ctx.fillStyle =
-            ch === "ॐ" ? "#ffd24acc" : Math.random() > 0.96 ? "#d6ffe0" : "#00ff4188";
+            ch === "ॐ" ? "#ffd24a" : Math.random() > 0.96 ? "#d6ffe0" : "#00ff41bb";
           ctx.fillText(ch, i * colWidth, y);
         }
         steps[i]++;
@@ -103,7 +103,7 @@ function DigitalRain() {
         width: "100%",
         height: "100%",
         zIndex: 0,
-        opacity: 0.35,
+        opacity: 0.5,
         pointerEvents: "none",
       }}
     />
