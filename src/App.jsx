@@ -615,7 +615,7 @@ export default function Portfolio() {
                 <a href="https://github.com/arsenic55" target="_blank" rel="noopener noreferrer">arsenic55</a>
                 <br />
                 <span style={{ color: C.dim }}>&gt; status:&nbsp;&nbsp;</span>
-                <span style={{ color: C.green }}>open to SOC / security analyst opportunities</span>
+                <span style={{ color: C.green }}>open</span>
                 <Cursor />
               </p>
             </Window>
