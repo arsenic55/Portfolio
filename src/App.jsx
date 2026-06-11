@@ -445,7 +445,7 @@ export default function Portfolio() {
           ))}
           <a
             className="navbtn"
-            href="https://github.com/arsenic55"
+            href="https://github.com/silentnode6"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -635,7 +635,7 @@ export default function Portfolio() {
                 <span style={{ color: C.dim }}>&gt; location:</span> Carluke, Scotland, UK
                 <br />
                 <span style={{ color: C.dim }}>&gt; github:&nbsp;&nbsp;</span>
-                <a href="https://github.com/arsenic55" target="_blank" rel="noopener noreferrer">arsenic55</a>
+                <a href="https://github.com/silentnode6" target="_blank" rel="noopener noreferrer">silentnode6</a>
                 <br />
                 <span style={{ color: C.dim }}>&gt; status:&nbsp;&nbsp;</span>
                 <span style={{ color: C.green }}>open</span>
